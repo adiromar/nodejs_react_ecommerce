@@ -1,7 +1,22 @@
-const user = require("../model/user.model");
+const apiResponse = require("../helpers/functions");
+const User = require("../model/user.model");
 
+const config = require("../config/constants");
 class AuthController {
     user;
+
+    mapUser = (data) => {
+        this.user = {
+            _id: data._id,
+            name: data.name,
+            email: data.email,
+            status: data.status,
+            role_id: data.role_id,
+            image: data.image,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt
+        }
+    }
 
     validateData = (data) => {
         let msg = [];
@@ -28,7 +43,7 @@ class AuthController {
     // register user
     register = (req, res, next) => {
         let data = req.body;
-
+        console.log("here");
         let validate = this.validateData(data);
         if(validate) {
             next(validate);
@@ -43,6 +58,19 @@ class AuthController {
             }
             // encrypt password with bcrypt library
             data.password = bcrypt.hashSync(data.password, 10);
+
+            let user = new User(data);
+            user.save()
+            .then((ack) => {
+                res.json({
+                    result: user,
+                    msg: "registered successfully",
+                    status: true
+                })
+                .catch((error) => {
+                    next({msg: JSON.stringify(error), status: 400})
+                })
+            })
         }
     }
 

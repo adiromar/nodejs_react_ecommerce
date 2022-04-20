@@ -1,7 +1,12 @@
+const jwt = require("jsonwebtoken");
+const config = require("../config/constants");
 const user = require("../model/user.model");
 
+
 const loginCheck = (req, res, next) => {
-    console.log("first call");
+    let token = null;
+
+    
     next();
 }
 
