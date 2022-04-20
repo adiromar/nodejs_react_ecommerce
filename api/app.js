@@ -6,6 +6,9 @@ const port = 9001;
 // load mongoose at start
 require("./service/mongoose");
 
+app.use(express.json())
+app.use(express.urlencoded())
+
 // for all endpoints with api
 app.use('/api', routes)
 
